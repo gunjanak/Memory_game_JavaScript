@@ -60,15 +60,19 @@ const cardArray = [
 
 ]
 
-console.log(cardArray)
 cardArray.sort(() => 0.5 - Math.random())
-console.log(cardArray.length)
+//console.log(cardArray.length)
+
+let clickCount = 24
 const gridDisplay = document.querySelector('#grid')
 let resultDisplay = document.querySelector('#result')
 let cardsChosen = []
 let cardsChoosenIds = []
 const cardsWon = []
-console.log(gridDisplay)
+let flag_won = 0
+
+let countDisplay = document.querySelector('#clickLeft')
+countDisplay.innerHTML = clickCount
 
 function createBoard() {
     for (let i=0; i<cardArray.length; i++) {
@@ -87,13 +91,17 @@ function checkMatch(){
     const cards = document.querySelectorAll('img')
     const optionOneId = cardsChoosenIds[0]
     const optionTwoId = cardsChoosenIds[1]
-    console.log('Check for a match')
+
+    console.log(cardsChosen[0])
+    console.log(cardsChoosenIds[0])
+    
     if(optionOneId == optionTwoId) {
         alert("You have clicked the same image")
+        
     }
 
-    console.log(cardsChoosenIds[0])
-    if(cardsChosen[0] == cardsChosen[1]){
+    
+    if((cardsChosen[0] == cardsChosen[1]) &&(optionOneId != optionTwoId) ){
         alert("You found a match")
         cards[optionOneId].setAttribute('src','images/white.png')
         cards[optionTwoId].setAttribute('src','images/white.png')
@@ -108,11 +116,19 @@ function checkMatch(){
         alert('Sorry try again')
 
     }
+
+    console.log(cardsChosen.length)
     cardsChosen = []
     cardsChoosenIds = []
 
     if (cardsWon.length == cardArray.length/2) {
         resultDisplay.innerHTML = 'Congratulations you found them all!'
+        flag_won = 1
+    }
+
+    if (clickCount === 0  && flag_won === 1){
+        alert('Time out')
+        location.reload();
     }
 
 
@@ -123,13 +139,22 @@ function checkMatch(){
 
 function filpCard() {
     const cardId = this.getAttribute('data-id')
+    console.log(cardId.length)
+    clickCount = clickCount - cardId.length
     
+    countDisplay.innerHTML = clickCount
     cardsChoosenIds.push(cardId)
-    console.log(cardsChosen)
-    console.log(cardsChoosenIds)
-
     cardsChosen.push(cardArray[cardId].name)
+   
     this.setAttribute('src',cardArray[cardId].img)
+
+    if(clickCount === 1){
+        alert('Last click remaining')
+    }
+    else if (clickCount === 0){
+        alert('Time out')
+        location.reload();
+    }
    
     if (cardsChosen.length === 2){
         setTimeout(checkMatch,500)

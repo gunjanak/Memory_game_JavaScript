@@ -120,13 +120,14 @@ function checkMatch(){
     console.log(cardsChosen.length)
     cardsChosen = []
     cardsChoosenIds = []
+    resultDisplay.textContent = cardsWon.length
 
     if (cardsWon.length == cardArray.length/2) {
         resultDisplay.innerHTML = 'Congratulations you found them all!'
         flag_won = 1
     }
 
-    if (clickCount === 0  && flag_won === 1){
+    if (clickCount === 0  && flag_won === 0){
         alert('Time out')
         location.reload();
     }
